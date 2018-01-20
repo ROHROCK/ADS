@@ -141,6 +141,39 @@ public:
     }
   }
 
+  //Delete a part of a book
+  void remove(){
+    int ch;
+    cout<<"1.To Delete The Whole Book: "<<endl;
+    cout<<"2.To Delete A Chapter"<<endl;
+    cout<<"3.To Delete A Section"<<endl;
+    cout<<"4.To Delete A Sub-Section"<<endl;
+    cout<<"Enter your choice: "<<endl;
+    cin>>ch;
+    switch (ch) {
+      case 1:
+            Head = NULL;
+      break;
+      case 2:
+            cout<<"Enter the Chapter you want to delete"<<endl;
+            cin>>chap;
+            /*Here three outcomes might take place ..
+            1.There may be a last chapter middle chapter or starting
+            chapter.
+            2.So we need to find the position of current Node and call the
+            appropiate code to delete the node
+            3.When the node is the first it can be found be checking if
+            the superior node-DL is == node to be deleted
+            4.When the node is at the middle then we can check if the node
+            is not pointing at null and != superior->DL
+            5.When the node->next == NULL*/
+      break;
+    }
+  }
+
+  void deleteFromBegin(string chapter){}
+  void deleteFromMiddle(string node){}
+  void deleteFromEnd(string node){}
 };
 
 int main()
@@ -152,14 +185,16 @@ int main()
     cout<<"*********MENU********"<<endl;
     cout<<"1.Create Book"<<endl;
     cout<<"2.Display Book"<<endl;
-    cout<<"3.Exit"<<endl;
+    cout<<"3.Delete A Book"<<endl;
+    cout<<"4.Exit"<<endl;
     cout<<"*********************"<<endl;
     cout<<"Enter your choice: "<<endl;
     cin>>ch;
     switch (ch) {
-      case 3: exit(EXIT_SUCCESS);
+      case 4: exit(EXIT_SUCCESS);
       case 1: obj.createBook(); break;
       case 2: obj.displayBook(); break;
+      case 3: obj.remove(); break;
       default: cout<<"Wrong choice !"<<endl;
     }
     cout<<"Do you want to continue ?"<<endl;
