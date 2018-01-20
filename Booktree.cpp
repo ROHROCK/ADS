@@ -1,6 +1,7 @@
+//Program to create a BST tree and search a element from it
 #include<iostream>
 #include<string.h>
-      
+
 using namespace std;
 
 struct node
