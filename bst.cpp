@@ -31,7 +31,7 @@ class bst {
   int highestDepth;
   node *Head,*revHead;
 public:
-  node* getHead(){ return Head;}
+  node* getHead(){ ret\urn Head;}
   node* getRevHead(){return revHead;}
   bst(){revHead = Head = NULL;}
 
@@ -42,12 +42,10 @@ public:
       node *child;
       node *parent = new node;
       if(f == 0){
-        cout<<"Main Tree"<<endl;
         child = Head; //this is the main tree
       }
       else if(f == 1){
         child = revHead; //this is the copy of the tree
-        cout<<"Copy Tree"<<endl;
       }
       if (f == 0 && Head == NULL)
           Head = temp;
@@ -235,7 +233,7 @@ int main(){
     cout<<"3.Find number of nodes in longest path: "<<endl; //NOT YET
     cout<<"4.Minimum data in the tree"<<endl; //DONE
     cout<<"5.Swap the pointers in the tree"<<endl; //DONE
-    cout<<"6.Search a value in the tree"<<endl; //NOT YET
+    cout<<"6.Search a value in the tree"<<endl; //DONE
     cout<<"7.Print the tree"<<endl;//DONE
     cout<<"8.Print the Reverse tree"<<endl;//DONE
     cout<<"9.Exit"<<endl;
