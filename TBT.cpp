@@ -63,49 +63,6 @@ class Tbt:public node{
         }
       }
     }
-    // void printTbt()
-    // {
-    //   //to avoid segmentation fault errors !
-    //   if (head == NULL) {
-    //     cout<<"The tree is empty !"<<endl;
-    //     return;
-    //     }
-    //     node *ptr = head;
-    //     while(ptr != NULL)
-    //       ptr = ptr->left;
-    //
-    //     //actual printing code
-    //     while(ptr->right != NULL  )
-    //     {
-    //       //when the node is not equal to the root
-    //       if(ptr->rightThread){
-    //         cout<<ptr->data;
-    //         ptr = ptr->right;
-    //       }
-    //       else
-    //         ptr = leftmost(ptr);
-    //     }
-    // }
-    // node* leftmost(node* ptr)
-    // {
-    //   //to avoid segmentation fault errors !
-    //   if(ptr == NULL)
-    //   {
-    //     cout<<"The pointer is empty ! Cannot traverse to the leftmost"<<endl;
-    //     return NULL;
-    //   }
-    //   if(ptr->right != NULL)
-    //     ptr = ptr->right;
-    //   else{
-    //     cout<<"The right child is not present !"<<endl;
-    //     return NULL;
-    //   }
-    //
-    //   while(ptr != NULL) //traverse left side of the tree
-    //     ptr = ptr->left;
-    //
-    //   return ptr; //pass the left most pointer
-    // }
     void createTbt(){
       int d =0,val = 0;
       cout<<"Enter the number nodes to add: "<<endl;
@@ -155,9 +112,7 @@ int main(){
     switch (ch) {
       case 3: exit(EXIT_SUCCESS);
       case 1: obj.createTbt(); break;
-      case 2: //obj.printTbt();
-      obj.inorder(obj.leftmost());
-      break;
+      case 2: obj.inorder(obj.leftmost()); break;
       default: cout<<"Entered value is invalid !"<<endl;
     }
     cout<<"Do you want to continue ?[Y/N]"<<endl;
