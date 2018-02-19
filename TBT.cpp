@@ -9,6 +9,7 @@ class node{
 public:
   int data ;
   bool rightThread ;
+  bool leftThread;
   node* right;
   node* left;
   node(){right = left = NULL; rightThread = false;}
@@ -17,6 +18,7 @@ public:
       temp->data = d ;
       temp->right = temp->left = NULL;
       temp->rightThread = false;
+      temp->leftThread = false;
       return temp;
     }
 };
@@ -26,60 +28,98 @@ class Tbt:public node{
   public:
     Tbt(){head = NULL;}
 
-    //function to add the data to the tbt
-    void addNode(int data )
-    {
-      node *temp = initNode(data); //call the parameterized constructor
-      node *child = head;
-      node* parent = new node;
-      if(head == NULL){
-          head = temp;
-      }else{
-        //when the tree has a root
-        while(child != NULL)
+    void createTbt(){
+      int n = -1;
+      node *ptr =  head;
+      char character;
+      int flag = 1;
+        while(flag)
         {
-          parent = child;
-          if(data > child->data )
-             child = child->right;
-          else
-             child = child->left;
-        }
-        //place the temp node at its appropiate place
-        if(data > parent->data){
-          if(parent->rightThread){
-            temp->right = parent->right;
-            parent->right = temp;
-            temp->rightThread = true;
+          node *temp = new node;
+
+          if(head == NULL)
+          {
+              cout<<"Enter the data: "<<endl;
+              cin>>n;
+              temp->data = n;
+              temp->left = NULL;
+              temp->right = NULL;
+              head = temp;
+              cout<<"The root is : "<<head->data<<endl;
+              flag = 0;
           }else{
-            //the parent does not have any rightThread right subtree
-            parent->right = temp;
+
+            cout<<"Enter Left or Right of :"<<ptr->data<<endl;
+            cin>>character;
+            if(n == -1){
+                cout<<"Enter the data: "<<endl;
+                cin>>n;
+              }
+            /*This code is for custom creation of tree by user point of view*/
+            if(character == 'l' || character == 'L')
+            {
+              //if node is not present of root set the node and derive its parent pointers
+              if(ptr->left == NULL && ptr == head)
+              {
+                temp->data = n;
+                temp->right = head;
+                temp->rightThread = true;
+                ptr->left = temp;
+                cout<<"Data entered Left of parent: "<<ptr->data<<endl;
+                flag = 0;
+              }else if(ptr->left == NULL){
+                 //Here node is present left side of subtree
+                 temp->data = n;
+                 temp->right = ptr;
+                 if(ptr->left != NULL){
+                    temp->leftThread = true;
+                    temp->left = ptr->left; //derive the pointer of parent to node
+                    ptr->leftThread = false;
+                  }
+                 ptr->left = temp;
+                 cout<<"Data entered Left of parent: "<<ptr->data<<endl;
+                 flag = 0;
+             }else  //Node exits so ... traverse the left subtree
+                ptr = ptr->left;
+
+             //Left node coding
+            }else if(character == 'r' || character == 'R'){
+              /*There will be 3 cases:
+                1) When data is to be entered root->right
+                2) When data is to be entered right
+                3) When right subtree is being traversed*/
+                if(ptr->right == NULL && ptr == head){ //case 1
+                  temp->data = n;
+                  temp->left = head;
+                  ptr->right = temp;
+                  cout<<"Data entered Right of Parent: "<<ptr->data<<endl;
+                  flag = 0;
+                }else if(ptr->right == NULL)
+                {
+                  temp->data = n;
+                  temp->left = ptr;
+                  if(ptr->right != NULL)
+                    {
+                      temp->right = ptr->right;
+                      temp->rightThread = true;
+                      ptr->rightThread = false;
+                    }
+                  ptr->right = temp;
+                  cout<<"Data entered Right of Parent: "<<ptr->data<<endl;
+                  flag = 0;
+                }else //Node exits so traverse it:
+                  ptr = ptr->right;
+            }else
+                cout<<"Invalid position entered please try again !"<<endl;
           }
         }
-        else{
-            //the node is smaller than the parent hence it will always point to its parent
-            temp->right = parent;
-            parent->left = temp;
-            temp->rightThread = true;
-        }
-      }
-    }
-    void createTbt(){
-      int d =0,val = 0;
-      cout<<"Enter the number nodes to add: "<<endl;
-      cin>>d;
-      for(int i = 1 ;i<=d;i++)
-      {
-        cout<<"Enter the value: "<<endl;
-        cin>>val;
-        addNode(val);
-      }
     }
     void inorder(node *data) //TBT code traversal
     {
         if(data == NULL)
           return;
 
-        cout<<data->data;
+        cout<<data->data<<" ";
         inorder(data->right);
     }
     node* leftmost(){
@@ -103,7 +143,7 @@ int main(){
   do {
     system("clear");
     cout<<"*************MENU************"<<endl;
-    cout<<"1.Create the BST"<<endl;
+    cout<<"1.Create the Binary Tree"<<endl;
     cout<<"2.Print the Threaded Tree"<<endl;
     cout<<"3.Exit"<<endl;
     cout<<"******************************"<<endl;
