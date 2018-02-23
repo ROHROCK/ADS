@@ -11,80 +11,34 @@ using namespace std;
 
 /*class node which is a structure for the expression tree */
 class node{
-  string data ;
+public:
+  char data ;
   int operand; //if it is operand(any digit) then it should be 1 if it is operator(+) then 0
   node *left;
   node *right;
   node(){
-    data = "";
     operand = 1;
     left = right = NULL;
   }
 };
 
 //This class will take the prefix expresson from the convert class and create a expression tree using stack
-class expression{
-  node *head;
-  stack<node> s;
-public:
-  node* createNode(char val)
-  {
-    node *temp;
-    temp->data = val;
-    if(isOperand(val))
-      temp->operand = 1;
-    else if(isOperator)
-      temp->operand = 0;
-
-    return temp;
-  }
-  void createExpressionTree(string prefix)
-  {
-      node * temp ;
-      //push the node in the stack
-      for(int i = 0 ; i <= prefix.length() - 1; i++)
-      {
-          temp = createNode(prefix[i]);
-          s.push(temp); //push the node in the stack
-      }
-
-      node *r , *l , *root;
-      while(s.size() != 1)
-      {
-        r = s.top();
-        s.pop();
-        l = s.top();
-        s.pop();
-        root = s.top();
-        s.pop();
-        root->left = l;
-        root->right = r;
-        s.push(root);
-      }
-      head = s.top();
-      s.pop();
-      if(!s.empty())
-        cout<<"Something went wrong !"<<endl;
-  }
-
-  //print the expresson tree using postfix non-recursion
-  void printExpressionTree()
-  {
-
-  }
-};
 class convert{
+  public:
   string infix;
-public:
+  string prefix;
    //convert infix to prefix and return it
    void InfixtoPrefix(string infix)
    {
      //first reverse the infix expression
      string revstring = reverseInfix(infix);
+     cout<<"Reverse String is: "<<revstring;
      //second take the postfix of that rev infix expression
-     string prefix = infixToPostfix(revstring);
+     string pre = infixToPostfix(revstring);
+     cout<<"Prefix before reverse: "<<prefix;
      //then reverse it and the print it
-     cout<<"Prefix is: "<<revString(prefix)<<endl;
+     prefix = revString(pre);
+     cout<<"Prefix is: "<<pre<<endl;
    }
 
    //function to reverse the string ;
@@ -196,7 +150,7 @@ public:
 
    bool isOperand(char ch)
    {
-      if(ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch > '0' && ch < '1')
+      if(ch >= 'A' && ch <= 'Z' || ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9')
         return true;
 
       return false;
@@ -231,10 +185,112 @@ public:
    }
 
 };
+class expression : public convert{
+  node *head;
+  stack<node*> expressionstack;
+public:
+  node* createNode(char val)
+  {
+    cout<<val<<endl;
+    node *temp;
+    temp->data = val; //conversion
+    if(isOperand(temp->data))
+      temp->operand = 1;
+    else if(isOperator(temp->data))
+      temp->operand = 0;
+
+    cout<<"Done ?"<<endl;
+    return temp;
+  }
+  void postfixTraversal()
+  {
+    node *root = head;
+    // Check for empty tree
+    if (root == NULL)
+        return;
+
+    stack <node*>s;
+    do
+    {
+        // Move to leftmost node
+        while (root)
+        {
+            // Push root's right child and then root to stack.
+            if (root->right)
+                s.push(root->right);//push(stack, root->right);
+
+            s.push(root);//push(stack, root);
+
+            // Set root as root's left child
+            root = root->left;
+        }
+
+        // Pop an item from stack and set it as root
+        root = s.top();
+        s.pop();
+
+        // If the popped item has a right child and the right child is not
+        // processed yet, then make sure right child is processed before root
+        if (root->right && s.top() == root->right)
+        {
+            s.pop();  // remove right child from stack
+            s.push(root);  // push root back to stack
+            root = root->right; // change root so that the right
+                                // child is processed next
+        }
+        else  // Else print root's data and set root as NULL
+        {
+            cout<<root->data;
+            root = NULL;
+        }
+    } while (!s.empty());
+  }
+
+  void createExpressionTree()
+  {
+      //push the node in the stack
+      for(int i = 0 ; i <= prefix.length() - 1; i++)
+      {
+          node *temp;
+          temp = createNode(prefix[i]);
+          expressionstack.push(temp); //push the node in the stack
+      }
+
+         node *r , *l , *root;
+        while(expressionstack.size() == 1)
+        {
+          if(!expressionstack.empty())
+          {
+            r = expressionstack.top();
+            expressionstack.pop();
+          }
+          if(!expressionstack.empty()){
+            l = expressionstack.top();
+            expressionstack.pop();
+          }
+            root = expressionstack.top();
+            //expressionstack.pop();
+            root->left = l;
+            root->right = r;
+            expressionstack.push(root);
+         }
+       // node *t;
+       // if(!expressionstack.empty())
+       //  {
+       //    t = expressionstack.top();
+       //    expressionstack.pop();
+       //  }
+       // if(expressionstack.empty())
+       //    cout<<"Something went wrong !"<<endl;
+
+      cout<<"Created Expression Tree !"<<endl;
+  }
+};
+
 int main()
 {
   string infix;
-  convert obj;
+  expression obj;
   int ch,data=0;
   char status;
   do {
@@ -242,7 +298,6 @@ int main()
     cout<<"*************MENU************"<<endl;
     cout<<"1.Enter infix expression to convert expression tree"<<endl; //DONE
     cout<<"2.Traverse using postorder traversal"<<endl; //DONE
-    cout<<"4.TO convert infix to postfix expression: "<<endl;
     cout<<"3.Exit"<<endl;
     cout<<"******************************"<<endl;
     cout<<"Enter your choice: "<<endl;
@@ -250,13 +305,13 @@ int main()
     switch (ch) {
       case 3: exit(EXIT_SUCCESS);
       case 1:
-      break;
-      case 4:
         cout<<"Enter the infix expression: "<<endl;
         cin>>infix;
         obj.InfixtoPrefix(infix);
       break;
       case 2:
+        obj.createExpressionTree();
+      //  obj.postfixTraversal();
       break;
       default: cout<<"Entered value is invalid !"<<endl;
     }
