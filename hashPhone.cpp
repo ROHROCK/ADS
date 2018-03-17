@@ -11,17 +11,17 @@ public:
 
 class hashing
 {
-  double hashTable[SIZE];
+  string hashTable[SIZE];
   double size;
-  double SKey;
-  double key;
+  string SKey;
+  string key;
   string n;
   name *nameptr;
 public:
   hashing(){
     nameptr = new name[SIZE];
-    for(int i = 0 ; i < SIZE ; i++)
-      hashTable[i] = 0;
+    // for(int i = 0 ; i < SIZE ; i++)
+    //   hashTable[i] = '\0';
   }
   void getKey(){
     cout<<"Enter the name: "<<endl;
@@ -29,14 +29,18 @@ public:
     cout<<"Enter the Key to be inserted in the hash table: "<<endl;
     cin>>key;
   }
+  int hash()
+  {
+    char firstCharASCII = n[0];
+    //cout<<"Test: "<<n[0]<<endl;
+    return (firstCharASCII % SIZE-1); //works for lower case alphabets (range less than 100)
+  }
   void insertIntoHashTable(){
     getKey();
-    //modulus operation
-    int temp = (int) key %100;
-    int location = temp % SIZE-1; //because hash table starts from 1 - 100]
+    int location = hash();
     //location = location%100;
     cout<<key<<endl;
-    if(hashTable[location] == 0)
+    if(hashTable[location].empty())
     {
       nameptr[location].name = this->n;
       nameptr[location].loc = location;
@@ -45,7 +49,7 @@ public:
     }else{
       //collision occured
       while(location < SIZE -1)
-        if(hashTable[++location] == 0)
+        if(hashTable[++location].empty())
           break;
 
       if(location == SIZE - 1)
@@ -56,6 +60,7 @@ public:
       nameptr[location].name = this->n;
       nameptr[location].loc = location;
       hashTable[location] = key;
+      cout<<"Number Successfully Entered Into the Hash Table !"<<endl;
     }
   }
 
@@ -75,6 +80,7 @@ public:
       if(name == (nameptr[i].name))
       {
         cout<<"Found !"<<endl<<"Number: "<<hashTable[nameptr[i].loc];
+        return;
       }
     }
     cout<<"NOT FOUND !"<<endl;
@@ -84,10 +90,6 @@ public:
 int main()
 {
   hashing obj;
-  // obj.insertIntoHashTable();
-  // obj.insertIntoHashTable();
-  // obj.displayHashTable();
-  // obj.searchKey();
   int ch;
   char status;
   do{
