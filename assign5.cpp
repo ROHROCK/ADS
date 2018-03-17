@@ -55,17 +55,18 @@ public:
       cout<<cities[i]<<"  ";
 
     cout<<endl;
-    
+
     for(int i = 0 ; i < n ; i++)
     {
+        cout<<cities[i]<<"\t";
         for(int j = 0 ; j < n ; j++)
         {
-            cout<<cities[i][j];
+            cout<<cityAdjancent[i][j]<<"   ";
         }
         cout<<endl;
       }
     }
-  }
+
 };
 int main()
 {
