@@ -65,6 +65,7 @@ public:
       cout<<"Enter the word to be deleted !"<<endl;
       cin>>wordToBeDeleted;
       int location = hashFunction(wordToBeDeleted);
+      //The word to be deleted is at the array
       if(wordToBeDeleted == hashTable[location].word){
         //if word is in Hash table default;
         if(!hashTable[location].next){
@@ -74,29 +75,28 @@ public:
           hashTable[location].meaning = "";
         }else{
           //chain exits in that particular location and there might be a word in the chain
-          cout<<"DOUBLE ENTRY !"<<endl;
-          node *ptrprev = NULL;
-          node* ptr = &hashTable[location];
-          while(ptr != NULL) //traverse the chain ...
-          {
-              if(ptr->word == wordToBeDeleted) //Then word is found !
-                break;
-              ptrprev = ptr;
-              ptr = ptr->next;
-          }
-          if(ptr == NULL){ //if  word is not found !
-            cout<<"No such word exist !"<<endl;
-            return;
-          }
-          if(ptr->next != NULL) //when the word is in the middle
-          {
-            ptrprev->next = ptr->next;
-            free(ptr);
-            return;
-          }
-          ptrprev->next = NULL; //when the word is at the end
-          free(ptr);
+          cout<<"Multi ENTRY !"<<endl;
+          node *ptr = hashTable[location].next;
+          hashTable[location].word = ptr->word;
+          hashTable[location].meaning = ptr->meaning;
+          hashTable[location].next = ptr->next;
+          delete(ptr);
         }
+      }else{
+        //The word exist inside the chain
+        /*Possible conditions ... 1.the word to be deleted does not exist in the chain
+        2.When the delted word is found then ... check which deletion logic to be used
+          i)delete from middle ii)Delete from end */
+          node *ptr = &hashTable[location];
+          while(ptr != NULL)
+          {
+            if(ptr->word == wordToBeDeleted)
+              break;
+
+            ptr = ptr->next;
+          }
+          //Delete last node
+          //if(!ptr->next)
       }
     }
 
